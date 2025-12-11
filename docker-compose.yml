@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  monolith:
+    build: ./monolith
+    container_name: monolith
+    ports:
+      - "8000:8000"
+    depends_on:
+      - service1
+      - service2
+      - service3
+      - service4
+      - service5
+      - service6
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  service1:
+    build: ./services/service1
+    container_name: service1
+    ports:
+      - "8001:8001"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  service2:
+    build: ./services/service2
+    container_name: service2
+    ports:
+      - "8002:8002"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  service3:
+    build: ./services/service3
+    container_name: service3
+    ports:
+      - "8003:8003"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  service4:
+    build: ./services/service4
+    container_name: service4
+    ports:
+      - "8004:8004"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  service5:
+    build: ./services/service5
+    container_name: service5
+    ports:
+      - "8005:8005"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  service6:
+    build: ./services/service6
+    container_name: service6
+    ports:
+      - "8006:8006"
+    environment:
+      - PYTHONUNBUFFERED=1
+

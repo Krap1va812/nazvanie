@@ -7,9 +7,14 @@ client = TestClient(app)
 
 @pytest.fixture(autouse=True)
 def reset_tokens():
+    from app.main import users_db
     tokens.clear()
+    users_db.clear()
+    # Register test user
+    users_db["user"] = "password123"
     yield
     tokens.clear()
+    users_db.clear()
 
 
 def test_root():

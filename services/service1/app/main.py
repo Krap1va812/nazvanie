@@ -16,7 +16,7 @@ users_cache = {}
 
 class RegisterRequest(BaseModel):
     username: str
-    email: str = ""
+    age: int = 0
 
 
 @app.get("/")
@@ -33,7 +33,7 @@ def health():
 def register_user(data: RegisterRequest):
     if data.username in users_cache:
         raise HTTPException(status_code=400, detail="User already exists")
-    user = {"username": data.username, "email": data.email}
+    user = {"username": data.username, "age": data.age}
     users_cache[data.username] = user
     return user
 

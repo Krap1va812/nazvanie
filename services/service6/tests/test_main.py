@@ -27,10 +27,10 @@ def test_health():
 
 
 def test_log_event():
-    r = client.post("/event?event_type=click&user_id=1&data=button_id_123")
+    r = client.post("/event", json={"event_type": "click", "user_id": "1", "data": "button_id_123"})
     assert r.status_code == 200
     assert r.json()["type"] == "click"
-    assert r.json()["user_id"] == 1
+    assert r.json()["user_id"] == "1"
 
 
 def test_get_stats_empty():
@@ -40,9 +40,9 @@ def test_get_stats_empty():
 
 
 def test_get_stats():
-    client.post("/event?event_type=click&user_id=1")
-    client.post("/event?event_type=click&user_id=2")
-    client.post("/event?event_type=view&user_id=1")
+    client.post("/event", json={"event_type": "click", "user_id": "1"})
+    client.post("/event", json={"event_type": "click", "user_id": "2"})
+    client.post("/event", json={"event_type": "view", "user_id": "1"})
     
     r = client.get("/stats")
     assert r.status_code == 200

@@ -25,20 +25,20 @@ def test_health():
 
 
 def test_process_payment():
-    r = client.post("/pay?user_id=1&amount=100.50")
+    r = client.post("/pay", json={"user_id": "1", "amount": 100.50})
     assert r.status_code == 200
-    assert r.json()["user_id"] == 1
+    assert r.json()["user_id"] == "1"
     assert r.json()["amount"] == 100.50
     assert r.json()["status"] == "completed"
 
 
 def test_invalid_amount():
-    r = client.post("/pay?user_id=1&amount=-50")
+    r = client.post("/pay", json={"user_id": "1", "amount": -50})
     assert r.status_code == 400
 
 
 def test_get_transaction():
-    client.post("/pay?user_id=1&amount=50")
+    client.post("/pay", json={"user_id": "1", "amount": 50})
     r = client.get("/transaction/1")
     assert r.status_code == 200
     assert r.json()["amount"] == 50

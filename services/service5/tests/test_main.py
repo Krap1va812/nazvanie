@@ -25,17 +25,17 @@ def test_health():
 
 
 def test_send_notification():
-    r = client.post("/notify?user_id=1&message=Hello%20User")
+    r = client.post("/notify", json={"user_id": "1", "message": "Hello User"})
     assert r.status_code == 200
-    assert r.json()["user_id"] == 1
+    assert r.json()["user_id"] == "1"
     assert r.json()["message"] == "Hello User"
     assert r.json()["read"] == False
 
 
 def test_get_notifications():
-    client.post("/notify?user_id=1&message=Message1")
-    client.post("/notify?user_id=1&message=Message2")
-    client.post("/notify?user_id=2&message=Message3")
+    client.post("/notify", json={"user_id": "1", "message": "Message1"})
+    client.post("/notify", json={"user_id": "1", "message": "Message2"})
+    client.post("/notify", json={"user_id": "2", "message": "Message3"})
     
     r = client.get("/notifications/1")
     assert r.status_code == 200
@@ -43,7 +43,8 @@ def test_get_notifications():
 
 
 def test_mark_as_read():
-    client.post("/notify?user_id=1&message=Test")
-    r = client.put("/notifications/1/read")
+    r_create = client.post("/notify", json={"user_id": "1", "message": "Test"})
+    notif_id = r_create.json()["id"]
+    r = client.put(f"/notifications/{notif_id}/read")
     assert r.status_code == 200
     assert r.json()["read"] == True

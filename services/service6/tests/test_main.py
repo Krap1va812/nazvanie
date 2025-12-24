@@ -53,9 +53,9 @@ def test_get_stats():
 
 
 def test_get_user_events():
-    client.post("/event?event_type=click&user_id=1")
-    client.post("/event?event_type=view&user_id=1")
-    client.post("/event?event_type=click&user_id=2")
+    client.post("/event", json={"event_type": "click", "user_id": "1"})
+    client.post("/event", json={"event_type": "view", "user_id": "1"})
+    client.post("/event", json={"event_type": "click", "user_id": "2"})
     
     r = client.get("/user-events/1")
     assert r.status_code == 200

@@ -50,9 +50,9 @@ def test_get_transaction_not_found():
 
 
 def test_get_balance():
-    client.post("/pay?user_id=1&amount=100")
-    client.post("/pay?user_id=1&amount=50")
-    client.post("/pay?user_id=2&amount=75")
+    client.post("/pay", json={"user_id": "1", "amount": 100})
+    client.post("/pay", json={"user_id": "1", "amount": 50})
+    client.post("/pay", json={"user_id": "2", "amount": 75})
     
     r = client.get("/balance/1")
     assert r.status_code == 200

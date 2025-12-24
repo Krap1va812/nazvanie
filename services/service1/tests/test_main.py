@@ -25,20 +25,20 @@ def test_health():
 
 
 def test_register_user():
-    r = client.post("/register?username=john&age=25")
+    r = client.post("/register", json={"username": "john", "age": 25})
     assert r.status_code == 200
     assert r.json()["username"] == "john"
     assert r.json()["age"] == 25
 
 
 def test_register_duplicate():
-    client.post("/register?username=john&age=25")
-    r = client.post("/register?username=john&age=30")
+    client.post("/register", json={"username": "john", "age": 25})
+    r = client.post("/register", json={"username": "john", "age": 30})
     assert r.status_code == 400
 
 
 def test_get_user():
-    client.post("/register?username=jane&age=28")
+    client.post("/register", json={"username": "jane", "age": 28})
     r = client.get("/users/jane")
     assert r.status_code == 200
     assert r.json()["username"] == "jane"
@@ -54,8 +54,8 @@ def test_count_users():
     assert r.status_code == 200
     assert r.json()["total_users"] == 0
     
-    client.post("/register?username=alice&age=30")
-    client.post("/register?username=bob&age=35")
+    client.post("/register", json={"username": "alice", "age": 30})
+    client.post("/register", json={"username": "bob", "age": 35})
     
     r = client.get("/count")
     assert r.status_code == 200

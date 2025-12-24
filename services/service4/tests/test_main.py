@@ -25,7 +25,7 @@ def test_health():
 
 
 def test_create_product():
-    r = client.post("/products?name=Laptop&price=999.99&stock=10")
+    r = client.post("/products", json={"name": "Laptop", "price": 999.99, "stock": 10})
     assert r.status_code == 200
     assert r.json()["name"] == "Laptop"
     assert r.json()["price"] == 999.99
@@ -33,20 +33,20 @@ def test_create_product():
 
 
 def test_create_invalid_product():
-    r = client.post("/products?name=Phone&price=-50&stock=5")
+    r = client.post("/products", json={"name": "Phone", "price": -50, "stock": 5})
     assert r.status_code == 400
 
 
 def test_get_product():
-    client.post("/products?name=Mouse&price=25.99&stock=100")
+    client.post("/products", json={"name": "Mouse", "price": 25.99, "stock": 100})
     r = client.get("/products/1")
     assert r.status_code == 200
     assert r.json()["name"] == "Mouse"
 
 
 def test_list_products():
-    client.post("/products?name=Item1&price=10&stock=5")
-    client.post("/products?name=Item2&price=20&stock=10")
+    client.post("/products", json={"name": "Item1", "price": 10, "stock": 5})
+    client.post("/products", json={"name": "Item2", "price": 20, "stock": 10})
     
     r = client.get("/products")
     assert r.status_code == 200
@@ -54,7 +54,7 @@ def test_list_products():
 
 
 def test_update_stock():
-    client.post("/products?name=Book&price=15.99&stock=50")
-    r = client.put("/products/1/stock?quantity=30")
+    client.post("/products", json={"name": "Book", "price": 15.99, "stock": 50})
+    r = client.put("/products/1/stock", json={"quantity": 30})
     assert r.status_code == 200
     assert r.json()["stock"] == 30

@@ -1,0 +1,87 @@
+name: Docker Hub Push
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+
+jobs:
+  push-to-dockerhub:
+    name: Push to Docker Hub
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+      
+      - name: Build and push Monolith
+        uses: docker/build-push-action@v5
+        with:
+          context: ./monolith
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-monolith:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-monolith:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-monolith:buildcache,mode=max
+      
+      - name: Build and push Service 1
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/service1
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-service1:latest
+      
+      - name: Build and push Service 2
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/service2
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-service2:latest
+      
+      - name: Build and push Service 3
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/service3
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-service3:latest
+      
+      - name: Build and push Service 4
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/service4
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-service4:latest
+      
+      - name: Build and push Service 5
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/service5
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-service5:latest
+      
+      - name: Build and push Service 6
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/service6
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/labmakeev-service6:latest
